@@ -35,7 +35,7 @@ public class ApiClient {
                 .queryParam("language", "{lang}")
                 .queryParam("sortBy", "{sort}")
                 .queryParam("from", "{date}")
-                .build(query.getName(), "ru", "publishedAt", "2024-09-30")
+                .build(query.getName(), "ru", "publishedAt", "2024-10-25")
         );
         //uri example without builder:
 //        uriSpec.uri(String.format("/v2/everything?q=%s&language=ru&sortBy=publishedAt&from=2024-09-30", query.getName()))
