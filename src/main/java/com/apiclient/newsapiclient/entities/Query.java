@@ -1,9 +1,6 @@
 package com.apiclient.newsapiclient.entities;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 @Data
 @AllArgsConstructor
@@ -13,4 +10,8 @@ public class Query {
     private String _id;
     private String _class;
     private String name;
+
+    public Query(String name) {
+        this.name = name;
+    }
 }

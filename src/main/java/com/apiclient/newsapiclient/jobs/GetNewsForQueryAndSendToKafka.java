@@ -6,7 +6,6 @@ import com.apiclient.newsapiclient.kafka.KafkaQueriesNewsSender;
 import com.apiclient.newsapiclient.kafka.entities.ListOfNewsObject;
 import com.apiclient.newsapiclient.kafka.entities.MapOfNews;
 import com.apiclient.newsapiclient.kafka.entities.NewsApiDTOToListOfNewsObjectConverter;
-import com.apiclient.newsapiclient.kafka.entities.NewsObject;
 import com.apiclient.newsapiclient.services.QueryService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,12 +31,12 @@ public class GetNewsForQueryAndSendToKafka {
         this.kafkaSender = kafkaSender;
     }
 
-    @Scheduled(fixedRateString = "${bot.client.getArticlesFixedRate}")
+    @Scheduled(initialDelay = 10000, fixedRateString = "${bot.client.getArticlesFixedRate}")
     public void execute() {
         LinkedHashMap<String, ListOfNewsObject> queriesNewsMap = new LinkedHashMap<>();
         log.info("Job GetNewsForQueryAndSendToKafka started");
         var queries = queryService.findAll();
-        log.info("Found queries from mongo. Quantity: " + queries.size());
+        log.info("Found queries from mongo. Size is: " + queries.size());
         if (queries.size() == 0) {
             log.info("No active queries found in MongoDB");
         }
@@ -46,11 +45,9 @@ public class GetNewsForQueryAndSendToKafka {
                     Query::getName, Function.identity(), (e1, e2) -> {
                         throw new RuntimeException();
                     }, LinkedHashMap::new));
-//        map.forEach((k,v) -> log.info("key is " + k + " : value is " + v));
             for (Map.Entry<String, Query> entry : map.entrySet()) {
                 queriesNewsMap.put(entry.getKey(), NewsApiDTOToListOfNewsObjectConverter.convert(apiClient.getNewsForQuery(entry.getValue())));
             }
-//        kafkaSender.sendMessageToQueriesNewsTopic(queriesNewsMap);
             MapOfNews mapOfNews = new MapOfNews(queriesNewsMap);
             kafkaSender.sendMessageToQueriesNewsTopic(mapOfNews);
             log.info("Sent queriesNewsMap to Kafka topic \"queriesNews\". Size of the map is: " + mapOfNews.getQueriesNewsMap().size());
