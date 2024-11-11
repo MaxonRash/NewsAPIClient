@@ -12,11 +12,11 @@ import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
-public class KafkaListener {
+public class KafkaActiveQueriesListener {
     QueryService queryService;
 
     @Autowired
-    public KafkaListener(QueryService queryService) {
+    public KafkaActiveQueriesListener(QueryService queryService) {
         this.queryService = queryService;
     }
 

@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class QueryService {
@@ -31,5 +30,9 @@ public class QueryService {
 
     public void delete(Query query) {
         queryRepository.delete(query);
+    }
+
+    public Query deleteQueryByNameIgnoreCase(String name) {
+        return queryRepository.deleteQueryByNameIgnoreCase(name);
     }
 }
