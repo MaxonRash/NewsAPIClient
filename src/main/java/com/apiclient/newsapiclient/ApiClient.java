@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
+import java.time.LocalDateTime;
 import java.util.concurrent.ExecutionException;
 
 @Component
@@ -29,13 +30,17 @@ public class ApiClient {
         //setting HTTP method
         WebClient.UriSpec<WebClient.RequestBodySpec> uriSpec = webClient.method(HttpMethod.GET);
         //setting HTTP body
+        LocalDateTime localDateTime = LocalDateTime.now();
+        localDateTime = localDateTime.minusDays(2);
+        LocalDateTime finalLocalDateTime = localDateTime;
         WebClient.RequestBodySpec bodySpec = uriSpec.uri(uriBuilder -> uriBuilder
                 .path("/v2/everything")
                 .queryParam("q", "{queue}")
                 .queryParam("language", "{lang}")
                 .queryParam("sortBy", "{sort}")
                 .queryParam("from", "{date}")
-                .build(query.getName(), "ru", "publishedAt", "2024-10-25")
+//                .build(query.getName(), "ru", "publishedAt", "2024-10-25")
+                .build(query.getName(), "ru", "publishedAt", finalLocalDateTime.toString())
         );
         //uri example without builder:
 //        uriSpec.uri(String.format("/v2/everything?q=%s&language=ru&sortBy=publishedAt&from=2024-09-30", query.getName()))
