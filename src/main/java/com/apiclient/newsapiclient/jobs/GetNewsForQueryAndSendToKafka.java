@@ -31,7 +31,8 @@ public class GetNewsForQueryAndSendToKafka {
         this.kafkaSender = kafkaSender;
     }
 
-    @Scheduled(initialDelay = 10000, fixedRateString = "${bot.client.getArticlesFixedRate}")
+    @Scheduled(cron = "${bot.client.scheduled.cron.expression1}", zone = "GMT+3")
+    @Scheduled(cron = "${bot.client.scheduled.cron.expression2}", zone = "GMT+3")
     public void execute() {
         LinkedHashMap<String, ListOfNewsObject> queriesNewsMap = new LinkedHashMap<>();
         log.info("Job GetNewsForQueryAndSendToKafka started");
